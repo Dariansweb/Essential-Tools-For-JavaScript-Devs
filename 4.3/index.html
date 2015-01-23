@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Handlebars</title>
+</head>
+<body>
+    <div id="output"></div>
+
+    <script id="posts-list-template" type="text/x-handlebars-template">
+        {{#each this}}
+            {{> post}}
+        {{/each}}
+    </script>
+
+    <script id="post-template" type="text/x-handlebars-template">
+        <div>
+            <h1>{{title}}</h1>
+            <h4>By: {{author.name}}</h4>
+            <p>
+                {{content}}
+            </p>
+            {{#if comments}}
+            <h1>Comments</h1>
+            {{#each comments}}
+                <h3><a href="/posts/{{../id}}#{{id}}">{{name}}</a></h3>
+                <p>{{content}}</p>
+            {{/each}}
+            {{else}}
+                <a href="foo.html">Leave a Comment</a>
+            {{/if}}
+        </div>
+    </script>
+
+    <script src="js/data.js"></script>
+    <script src="js/libs/jquery.min.js"></script>
+    <script src="js/libs/handlebars.min.js"></script>
+    <script>
+        var templateSource = $("#posts-list-template").html();
+        var partialTemplateSource = $("#post-template").html();
+
+        var template = Handlebars.compile(templateSource);
+        Handlebars.registerPartial("post", partialTemplateSource);
+
+        var html = template(getPosts());
+
+        $("#output").html(html);
+    </script>
+</body>
+</html>
